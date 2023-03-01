@@ -1,0 +1,19 @@
+query GetProducts {
+  products {
+    id
+    name
+    slug
+    variants(orderBy: price_ASC, first: 1) {
+      price
+      size {
+        width
+        height
+      }
+    }
+    images(first: 1) {
+      id
+      alt
+      url
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import Link from "next/link";
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -19,5 +20,13 @@ export default function Home() {
     slug: string;
   }>(GET_PRODUCTS);
   if (!data) return <p>Products not found</p>;
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  return (
+    <>
+      {data.products.map((product) => (
+        <li key={product.id}>
+          <Link href={`/products/${product.slug}`}>{product.name}</Link>
+        </li>
+      ))}
+    </>
+  );
 }
