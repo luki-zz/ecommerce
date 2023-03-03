@@ -14,10 +14,12 @@ const GET_PRODUCTS = gql`
 
 export default function Home() {
   const { data, loading, error } = useQuery<{
-    name: string;
-    id: string;
-    price: number;
-    slug: string;
+    products: {
+      name: string;
+      id: string;
+      price: number;
+      slug: string;
+    }[];
   }>(GET_PRODUCTS);
   if (!data) return <p>Products not found</p>;
   return (
