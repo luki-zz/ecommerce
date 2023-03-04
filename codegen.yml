@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://api-eu-west-2.hygraph.com/v2/cleityuh0096q01tadtcog76x/master"
+schema: ${NEXT_PUBLIC_HYGRAPH_API}
 documents: "graphql/*.graphql"
 generates:
   generated/graphql.tsx:

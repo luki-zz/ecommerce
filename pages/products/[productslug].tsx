@@ -12,8 +12,18 @@ function Product() {
     variables: { slug: productslug },
   });
 
-  if (loading) return <p>loading ...</p>;
-  if (!data) return <p>Products not found</p>;
+  if (loading)
+    return (
+      <div className="container">
+        <p>loading ...</p>
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="container">
+        <p>Product not found</p>
+      </div>
+    );
   const { name, description, price, images } = data.product;
 
   return (
