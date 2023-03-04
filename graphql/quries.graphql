@@ -12,3 +12,17 @@ query GetProduct($slug: String) {
     }
   }
 }
+
+query GetProducts {
+  products {
+    id
+    name
+    price
+    slug
+    images {
+      height
+      width
+      url
+    }
+  }
+}

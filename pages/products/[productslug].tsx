@@ -15,7 +15,7 @@ function Product() {
   if (loading) return <p>loading ...</p>;
   if (!data) return <p>Products not found</p>;
   const { name, description, price, images } = data.product;
-  console.log(images[0].url);
+
   return (
     <div className="container">
       <main className="products_details">

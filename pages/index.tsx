@@ -1,4 +1,3 @@
-import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useGetProductsQuery } from "generated/graphql";
 
