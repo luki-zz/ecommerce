@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "../../../public/logo.svg";
-import style from "../../../styles/Header.module.css";
+import style from "./Header.module.css";
 import { Navlist } from "./Navlist";
 import { Search } from "./Search";
 

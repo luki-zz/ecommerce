@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useGetProductsQuery } from "generated/graphql";
+import { ProductsList } from "src/components/ProductList/ProductsList";
 
 export default function Home() {
   const { data, loading, error } = useGetProductsQuery();
@@ -11,11 +12,7 @@ export default function Home() {
     );
   return (
     <div className="container">
-      {data.products.map((product) => (
-        <li key={product.id}>
-          <Link href={`/products/${product.slug}`}>{product.name}</Link>
-        </li>
-      ))}
+      <ProductsList products={data.products} />
     </div>
   );
 }
