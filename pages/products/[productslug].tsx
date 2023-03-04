@@ -2,42 +2,15 @@ import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
-
-const GET_PRODUCT = gql`
-  query GetProduct($slug: String) {
-    product(where: { slug: $slug }) {
-      description
-      name
-      id
-      slug
-      price
-      images {
-        url
-        width
-        height
-      }
-    }
-  }
-`;
+import { useGetProductQuery } from "generated/graphql";
 
 function Product() {
   const router = useRouter();
-  const { productlug } = router.query;
+  const { productslug } = router.query;
 
-  const { data, loading, error } = useQuery<{
-    product: {
-      name: string;
-      id: string;
-      slug: string;
-      description: string;
-      price: number;
-      images: {
-        url: string;
-        width: number;
-        height: number;
-      }[];
-    };
-  }>(GET_PRODUCT, { variables: { slug: productlug } });
+  const { data, loading, error } = useGetProductQuery({
+    variables: { slug: productslug },
+  });
 
   if (loading) return <p>loading ...</p>;
   if (!data) return <p>Products not found</p>;
