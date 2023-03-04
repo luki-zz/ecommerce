@@ -1,6 +1,7 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const GET_PRODUCT = gql`
   query GetProduct($slug: String) {
@@ -10,6 +11,11 @@ const GET_PRODUCT = gql`
       id
       slug
       price
+      images {
+        url
+        width
+        height
+      }
     }
   }
 `;
@@ -25,18 +31,32 @@ function Product() {
       slug: string;
       description: string;
       price: number;
+      images: {
+        url: string;
+        width: number;
+        height: number;
+      }[];
     };
   }>(GET_PRODUCT, { variables: { slug: productlug } });
 
   if (loading) return <p>loading ...</p>;
   if (!data) return <p>Products not found</p>;
-  const { name, description, price } = data.product;
+  const { name, description, price, images } = data.product;
+  console.log(images[0].url);
   return (
-    <>
-      <h1>{name}</h1>
-      <p>{description}</p>
-      <p>{price}</p>
-    </>
+    <div className="container">
+      <main className="products_details">
+        <h1>{name}</h1>
+        <p>{description}</p>
+        <p>{price}</p>
+        <Image
+          src={images[0].url}
+          alt={name}
+          width={images[0].width}
+          height={images[0].height}
+        />
+      </main>
+    </div>
   );
 }
 
