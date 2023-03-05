@@ -1,18 +1,27 @@
+query GetProduct($slug: String) {
+  product(where: { slug: $slug }) {
+    description
+    name
+    id
+    slug
+    price
+    images {
+      url
+      width
+      height
+    }
+  }
+}
+
 query GetProducts {
   products {
     id
     name
+    price
     slug
-    variants(orderBy: price_ASC, first: 1) {
-      price
-      size {
-        width
-        height
-      }
-    }
-    images(first: 1) {
-      id
-      alt
+    images {
+      height
+      width
       url
     }
   }

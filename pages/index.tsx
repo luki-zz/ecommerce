@@ -1,32 +1,18 @@
-import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
-
-const GET_PRODUCTS = gql`
-  query GetProducts {
-    products {
-      name
-      price
-      slug
-      id
-    }
-  }
-`;
+import { useGetProductsQuery } from "generated/graphql";
+import { ProductsList } from "src/components/ProductList/ProductsList";
 
 export default function Home() {
-  const { data, loading, error } = useQuery<{
-    name: string;
-    id: string;
-    price: number;
-    slug: string;
-  }>(GET_PRODUCTS);
-  if (!data) return <p>Products not found</p>;
+  const { data, loading, error } = useGetProductsQuery();
+  if (!data)
+    return (
+      <div className="container">
+        <p>Products not found</p>
+      </div>
+    );
   return (
-    <>
-      {data.products.map((product) => (
-        <li key={product.id}>
-          <Link href={`/products/${product.slug}`}>{product.name}</Link>
-        </li>
-      ))}
-    </>
+    <div className="container">
+      <ProductsList products={data.products} />
+    </div>
   );
 }
