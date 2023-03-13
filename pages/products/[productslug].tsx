@@ -4,12 +4,22 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useGetProductQuery } from "generated/graphql";
 
-function Product() {
+function ProductPage() {
   const router = useRouter();
   const { productslug } = router.query;
 
+  if (typeof productslug !== "string" && router.isReady) {
+    router.push("/404");
+    return <></>;
+  }
+  return <Product slug={productslug} />;
+}
+
+export default ProductPage;
+
+function Product({ slug }: { slug: string }) {
   const { data, loading, error } = useGetProductQuery({
-    variables: { slug: productslug },
+    variables: { slug },
   });
 
   if (loading)
@@ -18,7 +28,7 @@ function Product() {
         <p>loading ...</p>
       </div>
     );
-  if (!data)
+  if (!data?.product)
     return (
       <div className="container">
         <p>Product not found</p>
@@ -32,15 +42,17 @@ function Product() {
         <h1>{name}</h1>
         <p>{description}</p>
         <p>{price}</p>
-        <Image
-          src={images[0].url}
-          alt={name}
-          width={images[0].width}
-          height={images[0].height}
-        />
+        {images[0].width && images[0].height ? (
+          <Image
+            src={images[0].url}
+            alt={name}
+            width={images[0].width}
+            height={images[0].height}
+          />
+        ) : (
+          <></>
+        )}
       </main>
     </div>
   );
 }
-
-export default Product;
