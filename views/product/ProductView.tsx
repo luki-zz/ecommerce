@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useGetProductQuery } from "generated/graphql";
+import { GetServerSidePropsContext } from "next/types";
 
 export function Product({ slug }: { slug: string }) {
   const { data, loading, error } = useGetProductQuery({

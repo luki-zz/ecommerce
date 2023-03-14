@@ -3,3 +3,13 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
 }
+
+.productItem {
+  display: block;
+  text-align: center;
+}
+
+.productItem img {
+  max-width: 100%;
+  height: auto;
+}
