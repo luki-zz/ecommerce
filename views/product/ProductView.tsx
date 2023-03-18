@@ -2,9 +2,12 @@ import React from "react";
 import Image from "next/image";
 import { useGetProductQuery } from "generated/graphql";
 import { GetServerSidePropsContext } from "next/types";
+import { useCartContext } from "src/context/cart_context/cart_context";
 
 export function Product({ product }) {
-  const { name, description, price, images } = product;
+  const { name, description, price, images, id } = product;
+
+  const { buy } = useCartContext();
 
   return (
     <div className="container">
@@ -22,6 +25,9 @@ export function Product({ product }) {
         ) : (
           <></>
         )}
+        <button className="addToCart" onClick={() => buy(id, name, price)}>
+          Add To Cart
+        </button>
       </main>
     </div>
   );
