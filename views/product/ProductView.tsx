@@ -3,24 +3,8 @@ import Image from "next/image";
 import { useGetProductQuery } from "generated/graphql";
 import { GetServerSidePropsContext } from "next/types";
 
-export function Product({ slug }: { slug: string }) {
-  const { data, loading, error } = useGetProductQuery({
-    variables: { slug },
-  });
-
-  if (loading)
-    return (
-      <div className="container">
-        <p>loading ...</p>
-      </div>
-    );
-  if (!data?.product)
-    return (
-      <div className="container">
-        <p>Product not found</p>
-      </div>
-    );
-  const { name, description, price, images } = data.product;
+export function Product({ product }) {
+  const { name, description, price, images } = product;
 
   return (
     <div className="container">

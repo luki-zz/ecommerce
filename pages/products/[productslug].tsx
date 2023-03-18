@@ -11,17 +11,8 @@ import { Product } from "views/product/ProductView";
 import { GetServerSidePropsContext } from "next";
 import { client } from "apollo/apolloClients";
 
-function ProductPage() {
-  const router = useRouter();
-  const { productslug } = router.query;
-
-  if (typeof productslug !== "string" && router.isReady) {
-    router.push("/404");
-    return <></>;
-  }
-  if (typeof productslug === "string") {
-    return <Product slug={productslug} />;
-  }
+function ProductPage(props) {
+  return <Product product={props.product} />;
 }
 
 export default ProductPage;
@@ -41,13 +32,13 @@ export async function getServerSideProps({
     query: GetProductDocument,
     variables: { slug },
   });
-  const { data } = product.data;
+  const { data } = product;
 
-  if (!data?.product) {
+  if (!data.product) {
     return { notFound: true };
   }
 
   return {
-    props: { product: data?.product }, // will be passed to the page component as props
+    props: { product: data.product }, // will be passed to the page component as props
   };
 }

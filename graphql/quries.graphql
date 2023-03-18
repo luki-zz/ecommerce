@@ -1,4 +1,4 @@
-query GetProduct($slug: String) {
+query GetProduct($slug: String!) {
   product(where: { slug: $slug }) {
     description
     name
