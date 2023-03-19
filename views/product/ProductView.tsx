@@ -38,7 +38,7 @@ export function Product({ product }) {
             <p className={style.productDescription}>{description}</p>
             <button
               className={style.addToCart}
-              onClick={() => addToCart(id, name, price)}
+              onClick={() => addToCart({ id, name, price })}
             >
               Add To Cart
             </button>

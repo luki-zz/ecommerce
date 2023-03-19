@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
-import { calculateTotals } from "./utils_cart_context";
+// import { calculateTotals } from "./utils_cart_context";
 
 type CartContextType = {
-  addToCart: (id: string, name: string, price: number) => void;
-  cartSummary: { totalQty: number; totalValue: number };
+  addToCart: (product: { id: string; name: string; price: number }) => void;
+  cartSummary: { totalAmount: number; totalCost: number };
 };
 
 type CartTypes = {
@@ -14,71 +14,71 @@ type CartTypes = {
   value: number;
 };
 
-type SummaryType = {
-  totalQty: number;
-  totalValue: number;
-};
+const CartContext = React.createContext<CartContextType | undefined>(undefined);
 
-const CartContext = React.createContext<CartContextType | null>(null);
-
-export const CartProvider: React.FC<React.ReactNode> = ({ children }) => {
+export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartTypes[]>([]);
-  const [cartSummary, setCartSummary] = useState<SummaryType>({
-    totalQty: 0,
-    totalValue: 0,
-  });
-
-  const calculateTotals = () => {
-    return cart.reduce(
-      (acc, el: CartTypes) => {
-        acc.totalQty += el.qty;
-        acc.totalValue += el.value;
-        return acc;
-      },
-      { totalQty: 0, totalValue: 0 }
-    );
-  };
-
-  const addToCart = (id: string, name: string, price: number) => {
+  console.log(cart);
+  const addToCart = (product: Parameters<CartContextType["addToCart"]>[0]) => {
     setCart((prevCart) => {
-      if (prevCart.find((cartItem: CartTypes) => cartItem.id === id)) {
-        const newState = prevCart.map((item: CartTypes) => {
-          return {
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            qty: item.qty + 1,
-            value: item.price * (item.qty + 1),
-          };
+      const addedProduct = prevCart.find(
+        (cartItem: CartTypes) => cartItem.id === product.id
+      );
+      if (addedProduct) {
+        const newOrder = prevCart.map((item: CartTypes) => {
+          if (item.id === addedProduct.id) {
+            return {
+              ...item,
+              qty: item.qty + 1,
+              value: item.price * (item.qty + 1),
+            };
+          }
+          return item;
         });
-        return newState;
-      } else {
-        return [...prevCart, { id, name, price, qty: 1 }];
+        return newOrder;
       }
+      return [...prevCart, { ...product, qty: 1, value: product.price }];
     });
-    setCartSummary(calculateTotals());
   };
 
-  useEffect(() => {
-    const localCart = localStorage.getItem("cart");
-    const initialCartState = cart ? JSON.parse(localCart) : [];
-    setCart(initialCartState);
-  }, []);
+  // useEffect(() => {
+  //   const localCart = localStorage.getItem("cart");
+  //   const initialCartState = cart ? JSON.parse(localCart) : [];
+  //   setCart(initialCartState);
+  // }, []);
 
-  useEffect(() => {
-    setCartSummary(calculateTotals());
-    if (cart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //   setCartSummary(calculateTotals());
+  //   if (cart.length > 0) {
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+  // }, [cart]);
 
   return (
-    <CartContext.Provider value={{ addToCart, cartSummary }}>
+    <CartContext.Provider
+      value={{
+        addToCart,
+        cartSummary: cart.reduce(
+          (summary, product) => ({
+            totalAmount: summary.totalAmount + product.qty,
+            totalCost: summary.totalCost + product.qty * product.price,
+          }),
+          {
+            totalCost: 0,
+            totalAmount: 0,
+          }
+        ),
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
 
 export const useCartContext = () => {
-  return useContext(CartContext);
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error("CartContext must be used within a CartProvider");
+  }
+  return context;
 };
