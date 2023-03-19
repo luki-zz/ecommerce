@@ -3,6 +3,7 @@ import Image from "next/image";
 import style from "./ProductView.module.css";
 import { useCartContext } from "src/context/cart_context/cart_context";
 import Link from "next/link";
+import { PageHeader } from "src/components/PageHeader/PageHeader";
 
 export function Product({ product }) {
   const { name, description, price, images, id } = product;
@@ -11,13 +12,7 @@ export function Product({ product }) {
 
   return (
     <>
-      <section className={style.productHeader}>
-        <div className="container">
-          <h3 className={style.breadCrumbs}>
-            <Link href="/">Home</Link> / {name}
-          </h3>{" "}
-        </div>
-      </section>
+      <PageHeader title={name} />
       <div className="container">
         <main className={style.products_details}>
           <div className={style.col1}>

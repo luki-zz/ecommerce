@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import { calculateTotals } from "./utils_cart_context";
 
 type CartContextType = {
   addToCart: (id: string, name: string, price: number) => void;
