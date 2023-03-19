@@ -4,7 +4,13 @@ import { ProductsList } from "src/components/ProductList/ProductsList";
 
 export default function Home() {
   const { data, loading, error } = useGetProductsQuery();
-  if (!data)
+  if (loading)
+    return (
+      <div className="container">
+        <p>Loading</p>
+      </div>
+    );
+  if (!data && !loading)
     return (
       <div className="container">
         <p>Products not found</p>
