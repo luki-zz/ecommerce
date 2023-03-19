@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
+import { calculateTotals } from "./utils_cart_context";
 
 type CartContextType = {
-  buy: (id: string, name: string, price: number) => void;
+  addToCart: (id: string, name: string, price: number) => void;
   cartSummary: { totalQty: number; totalValue: number };
 };
 
@@ -13,18 +14,23 @@ type CartTypes = {
   value: number;
 };
 
+type SummaryType = {
+  totalQty: number;
+  totalValue: number;
+};
+
 const CartContext = React.createContext<CartContextType | null>(null);
 
 export const CartProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const [cart, setCart] = useState([]);
-  const [cartSummary, setCartSummary] = useState({
+  const [cart, setCart] = useState<CartTypes[]>([]);
+  const [cartSummary, setCartSummary] = useState<SummaryType>({
     totalQty: 0,
     totalValue: 0,
   });
 
   const calculateTotals = () => {
     return cart.reduce(
-      (acc, el) => {
+      (acc, el: CartTypes) => {
         acc.totalQty += el.qty;
         acc.totalValue += el.value;
         return acc;
@@ -33,7 +39,7 @@ export const CartProvider: React.FC<React.ReactNode> = ({ children }) => {
     );
   };
 
-  const buy = (id, name, price) => {
+  const addToCart = (id: string, name: string, price: number) => {
     setCart((prevCart) => {
       if (prevCart.find((cartItem: CartTypes) => cartItem.id === id)) {
         const newState = prevCart.map((item: CartTypes) => {
@@ -67,7 +73,7 @@ export const CartProvider: React.FC<React.ReactNode> = ({ children }) => {
   }, [cart]);
 
   return (
-    <CartContext.Provider value={{ buy, cartSummary }}>
+    <CartContext.Provider value={{ addToCart, cartSummary }}>
       {children}
     </CartContext.Provider>
   );

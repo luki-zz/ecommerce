@@ -1,5 +1,9 @@
 :root {
   --font-color: #102a42;
+  --color-primary: #aa785c;
+  --color-primary-1: #463328;
+  --color-primary-3: #7e5a46;
+  --color-primary-10: #eaded7;
 }
 
 * {
@@ -10,7 +14,7 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--font-color);
 }
 
