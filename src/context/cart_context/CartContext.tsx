@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { calculateTotals } from "./utils_cart_context";
+// import { calculateTotals } from "./utils_cart_context";
 
 type CartContextType = {
   addToCart: (product: { id: string; name: string; price: number }) => void;
@@ -18,23 +18,7 @@ const CartContext = React.createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartTypes[]>([]);
-  const [cartSummary, setCartSummary] = useState<SummaryType>({
-    totalQty: 0,
-    totalValue: 0,
-  });
-
-  const calculateTotals = () => {
-    return cart.reduce(
-      (acc, el: CartTypes) => {
-        acc.totalQty += el.qty;
-        acc.totalValue += el.value;
-        return acc;
-      },
-      { totalQty: 0, totalValue: 0 }
-    );
-  };
-
-  const addToCart = (id: string, name: string, price: number) => {
+  const addToCart = (product: Parameters<CartContextType["addToCart"]>[0]) => {
     setCart((prevCart) => {
       const addedProduct = prevCart.find(
         (cartItem: CartTypes) => cartItem.id === product.id
@@ -62,15 +46,29 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   //   setCart(initialCartState);
   // }, []);
 
-  useEffect(() => {
-    setCartSummary(calculateTotals());
-    if (cart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //   setCartSummary(calculateTotals());
+  //   if (cart.length > 0) {
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+  // }, [cart]);
 
   return (
-    <CartContext.Provider value={{ addToCart, cartSummary }}>
+    <CartContext.Provider
+      value={{
+        addToCart,
+        cartSummary: cart.reduce(
+          (summary, product) => ({
+            totalAmount: summary.totalAmount + product.qty,
+            totalCost: summary.totalCost + product.qty * product.price,
+          }),
+          {
+            totalCost: 0,
+            totalAmount: 0,
+          }
+        ),
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

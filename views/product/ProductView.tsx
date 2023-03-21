@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import style from "./ProductView.module.css";
-import { useCartContext } from "src/context/cart_context/cart_context";
+import { useCartContext } from "src/context/cart_context/CartContext";
 import Link from "next/link";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 
