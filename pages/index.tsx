@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { useGetProductsQuery } from "generated/graphql";
 import { ProductsList } from "src/components/ProductList/ProductsList";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 
 export default function Home() {
   const { data, loading, error } = useGetProductsQuery();
+
   if (loading)
     return (
       <div className="container">
