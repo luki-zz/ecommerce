@@ -1,7 +1,7 @@
 import { CartTypes, CartContextType } from "./CartContext";
 export const addProductToCart = (
   prevCart: CartTypes[],
-  product: { product: CartContextType["addToCart"] }
+  product: Parameters<CartContextType["addToCart"]>[0]
 ) => {
   const addedProduct = prevCart.find(
     (cartItem: CartTypes) => cartItem.id === product.id
@@ -22,9 +22,12 @@ export const addProductToCart = (
   return [...prevCart, { ...product, qty: 1, value: product.price }];
 };
 
-export const getCartSummary = (cart) =>
+export const getCartSummary = (cart: CartTypes[]) =>
   cart.reduce(
-    (summary, product) => ({
+    (
+      summary: { totalCost: number; totalAmount: number },
+      product: CartTypes
+    ) => ({
       totalAmount: summary.totalAmount + product.qty,
       totalCost: summary.totalCost + product.qty * product.price,
     }),
