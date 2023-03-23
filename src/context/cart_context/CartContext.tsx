@@ -15,6 +15,12 @@ export type CartTypes = {
   value: number;
 };
 
+export type ProductType = {
+  id: string;
+  name: string;
+  price: number;
+};
+
 const CartContext = React.createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
