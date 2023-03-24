@@ -11,6 +11,7 @@ export type CartContextType = {
   }) => void;
   cartSummary: { totalAmount: number; totalCost: number };
   cart: CartTypes[];
+  clearCart: () => void;
 };
 
 export type CartTypes = {
@@ -54,6 +55,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
         cartSummary: getCartSummary(cart),
         cart,
+        clearCart: () => setCart([]),
       }}
     >
       {children}
