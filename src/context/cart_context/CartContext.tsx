@@ -3,8 +3,14 @@ import { addProductToCart, getCartSummary } from "./utilsCartContex";
 // import { calculateTotals } from "./utils_cart_context";
 
 export type CartContextType = {
-  addToCart: (product: { id: string; name: string; price: number }) => void;
+  addToCart: (product: {
+    id: string;
+    name: string;
+    price: number;
+    image: { url: string; width: number; height: number };
+  }) => void;
   cartSummary: { totalAmount: number; totalCost: number };
+  cart: CartTypes[];
 };
 
 export type CartTypes = {
@@ -13,6 +19,7 @@ export type CartTypes = {
   price: number;
   qty: number;
   value: number;
+  image: { url: string; width: number; height: number };
 };
 
 export type ProductType = {
@@ -26,17 +33,18 @@ const CartContext = React.createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartTypes[]>([]);
 
-  useEffect(() => {
-    const localCart = localStorage.getItem("cart");
-    const initialCartState = cart ? JSON.parse(localCart) : [];
-    setCart(initialCartState);
-  }, []);
+  // useEffect(() => {
+  //   const localCart = localStorage.getItem("cart");
+  //   const initialCartState = cart ? JSON.parse(localCart) : [];
+  //   console.log(cart);
+  //   setCart(initialCartState);
+  // }, []);
 
-  useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //   if (cart.length > 0) {
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+  // }, [cart]);
 
   return (
     <CartContext.Provider
@@ -45,6 +53,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           setCart((prevCart) => addProductToCart(prevCart, product));
         },
         cartSummary: getCartSummary(cart),
+        cart,
       }}
     >
       {children}
