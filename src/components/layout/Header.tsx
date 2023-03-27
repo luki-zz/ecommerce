@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "../../../public/logo.svg";
+import { CartIcon } from "../CartIcon/CartIcon";
 import style from "./Header.module.css";
 import { Navlist } from "./Navlist";
 import { Search } from "./Search";
@@ -16,7 +17,9 @@ const Header = () => {
           </Link>
           <Search />
           <Navlist />
-          <div className="tools">Cart | Login</div>
+          <div className="tools">
+            <CartIcon />
+          </div>
         </div>
       </div>
     </header>

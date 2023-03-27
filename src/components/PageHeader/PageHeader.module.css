@@ -1,0 +1,13 @@
+.productHeader {
+  background-color: var(--color-primary-10);
+  padding: 60px 0px;
+}
+
+.breadCrumbs {
+  font-size: 1.5rem;
+  color: var(--color-primary-1);
+}
+
+.breadCrumbs a {
+  color: var(--color-primary-3);
+}
