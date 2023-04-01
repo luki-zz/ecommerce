@@ -42,7 +42,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // }, []);
 
   // useEffect(() => {
-  //   if (cart.length > 0) {
+  //   if (!cart.length) {
   //     localStorage.setItem("cart", JSON.stringify(cart));
   //   }
   // }, [cart]);

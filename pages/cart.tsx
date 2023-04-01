@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import Header from "src/components/layout/Header";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import { useCartContext } from "src/context/cart_context/CartContext";
 import style from "./cart.module.css";
