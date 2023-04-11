@@ -1,18 +1,21 @@
 import React from "react";
-import { Login } from "src/components/Login/Login";
+import { LoginRegister } from "src/components/Login/LoginRegister";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
-import { Register } from "src/components/Register/Register";
 import style from "./login.module.css";
+import { dataType } from "src/components/Login/LoginRegister";
 
 const LoginPage = () => {
+  const login = (data: dataType) => {
+    console.log(data);
+  };
+  const register = (data: dataType) => console.log(data);
   return (
     <>
       <PageHeader title="Login / Register" />
       <div className="container">
         <section className={style.loginRegisterWrap}>
-          <Login />
-
-          <Register />
+          <LoginRegister title="Login Here" action={login} />
+          <LoginRegister title="Register Here" action={register} />
         </section>
       </div>
     </>
