@@ -1,4 +1,4 @@
-import { CartTypes, CartContextType } from "./CartContext";
+import type { CartTypes, CartContextType } from "./CartContext";
 export const addProductToCart = (
   prevCart: CartTypes[],
   product: Parameters<CartContextType["addToCart"]>[0]

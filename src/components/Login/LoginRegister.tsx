@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import style from "./Login.module.css";
+import { registerSchema } from "./loginRegisterSchema";
 
 export type dataType = {
   login: string;
@@ -19,7 +20,7 @@ export const LoginRegister = (props: loginProps) => {
     watch,
     reset,
     formState: { errors, isSubmitted },
-  } = useForm<dataType>();
+  } = useForm<dataType>({ registerSchema });
 
   useEffect(() => {
     reset({

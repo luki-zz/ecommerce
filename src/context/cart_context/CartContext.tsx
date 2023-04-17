@@ -1,5 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { addProductToCart, getCartSummary } from "./utilsCartContex";
+import { cartSchema } from "./schemaCart";
+import type { CartTypes } from "./schemaCart";
 // import { calculateTotals } from "./utils_cart_context";
 
 export type CartContextType = {
@@ -14,19 +16,11 @@ export type CartContextType = {
   clearCart: () => void;
 };
 
-export type CartTypes = {
-  id: string;
-  name: string;
-  price: number;
-  qty: number;
-  value: number;
-  image: { url: string; width: number; height: number };
-};
-
 export type ProductType = {
   id: string;
   name: string;
   price: number;
+  image: { url: string; width: number; height: number };
 };
 
 const CartContext = React.createContext<CartContextType | undefined>(undefined);
@@ -34,18 +28,24 @@ const CartContext = React.createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartTypes[]>([]);
 
-  // useEffect(() => {
-  //   const localCart = localStorage.getItem("cart");
-  //   const initialCartState = cart ? JSON.parse(localCart) : [];
-  //   console.log(cart);
-  //   setCart(initialCartState);
-  // }, []);
+  useEffect(() => {
+    const localCart = localStorage.getItem("cart");
+    if (localCart) {
+      const cartLocalStorage = JSON.parse(localCart);
+      const isValidCart = cartSchema.isValidSync(cartLocalStorage);
+      if (!isValidCart) {
+        localStorage.removeItem("cart");
+        return;
+      }
+      setCart(cartLocalStorage);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   if (!cart.length) {
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //   }
-  // }, [cart]);
+  useEffect(() => {
+    if (!cart.length) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   return (
     <CartContext.Provider

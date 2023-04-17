@@ -2,11 +2,16 @@ import React from "react";
 import { LoginRegister } from "src/components/Login/LoginRegister";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import style from "./login.module.css";
-import { dataType } from "src/components/Login/LoginRegister";
+import type { dataType } from "src/components/Login/LoginRegister";
+import { useForm } from "react-hook-form";
 
 const LoginPage = () => {
   const login = (data: dataType) => {
     console.log(data);
+    reset({
+      login: "",
+      password: "",
+    });
   };
   const register = (data: dataType) => console.log(data);
   return (

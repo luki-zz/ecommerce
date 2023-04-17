@@ -1,14 +1,7 @@
-import { CartTypes, ProductType } from "../CartContext";
+import type { CartTypes, ProductType } from "../CartContext";
 import { faker } from "@faker-js/faker";
 import { addProductToCart } from "../utilsCartContex";
-
-const createProduct = (): ProductType => {
-  return {
-    id: faker.datatype.uuid(),
-    name: faker.commerce.productName(),
-    price: Number(faker.commerce.price()),
-  };
-};
+import { createProduct } from "src/tests/mocks/createProduct";
 
 const createCart = (numberItems: number): CartTypes[] => {
   const amoutProduct = faker.datatype.number({ min: 1, max: 10 });

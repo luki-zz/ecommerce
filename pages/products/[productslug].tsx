@@ -2,8 +2,8 @@ import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import {
-  GetProductDocument,
+import { GetProductDocument } from "generated/graphql";
+import type {
   GetProductQueryResult,
   GetProductQueryVariables,
 } from "generated/graphql";
