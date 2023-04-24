@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import style from "./Login.module.css";
 import { registerSchema } from "./loginRegisterSchema";
+import { Input } from "../Input/Input";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export type dataType = {
-  login: string;
+  email: string;
   password: string;
 };
 
@@ -17,44 +19,32 @@ export const LoginRegister = (props: loginProps) => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
-    formState: { errors, isSubmitted },
-  } = useForm<dataType>({ registerSchema });
+    formState: { errors, isSubmitted, isValid },
+  } = useForm<dataType>({ resolver: yupResolver(registerSchema) });
 
-  useEffect(() => {
-    reset({
-      login: "",
-      password: "",
-    });
-  }, [isSubmitted]);
+  // useEffect(() => {
+  //   if (isValid) {
+  //     reset({
+  //       login: "",
+  //       password: "",
+  //     });
+  //   }
+  // }, [isSubmitted]);
 
   return (
     <>
       <form onSubmit={handleSubmit(props.action)} className={style.form}>
         <h2>{props.title}</h2>
-        <label htmlFor="login">
-          Login:
-          <br />
-          <input {...register("login", { required: true })} type="text" />
-          <br />
-          <div className={style.notification}>
-            {errors.login && <span>This filed is required</span>}
-          </div>
-        </label>
-        <label htmlFor="password">
-          Password:
-          <br />
-          <input
-            {...register("password", { required: true })}
-            type="password"
-          />
-          <br />
-          <div className={style.notification}>
-            {errors.password && <span>This filed is required</span>}
-          </div>
-        </label>
-        <input type="submit" value="submit" />
+
+        <Input label="Login" {...register("email")} error={errors.login} />
+
+        <Input
+          label="Password"
+          {...register("password")}
+          error={errors.password}
+        />
+        <button type="submit">Submit</button>
       </form>
     </>
   );
