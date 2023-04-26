@@ -37,12 +37,16 @@ export const LoginRegister = (props: loginProps) => {
       <form onSubmit={handleSubmit(props.action)} className={style.form}>
         <h2>{props.title}</h2>
 
-        <Input label="Login" {...register("email")} error={errors.login} />
+        <Input
+          label="Login"
+          {...register("email")}
+          error={errors.login?.message}
+        />
 
         <Input
           label="Password"
           {...register("password")}
-          error={errors.password}
+          error={errors.password?.message}
         />
         <button type="submit">Submit</button>
       </form>

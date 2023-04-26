@@ -13,8 +13,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <label htmlFor="login">
           {label}
           <input {...props} ref={ref} />
-          <div className={style.notification}>{error}</div>
         </label>
+        <div className={style.notification}>{error}</div>
       </>
     );
   }
