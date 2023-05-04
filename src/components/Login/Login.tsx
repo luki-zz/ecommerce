@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import style from "./Login.module.css";
 import { registerSchema } from "./loginRegisterSchema";
 import { Input } from "../Input/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { LoginRegisterButton } from "../LoginRegisterButton/LoginRegisterButton";
 
 export type dataType = {
   email: string;
@@ -11,36 +12,25 @@ export type dataType = {
 };
 
 type loginProps = {
-  title: string;
   action: (data: dataType) => void;
 };
 
-export const LoginRegister = (props: loginProps) => {
+export const Login = (props: loginProps) => {
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors, isSubmitted, isValid },
+    formState: { errors },
   } = useForm<dataType>({ resolver: yupResolver(registerSchema) });
-
-  // useEffect(() => {
-  //   if (isValid) {
-  //     reset({
-  //       login: "",
-  //       password: "",
-  //     });
-  //   }
-  // }, [isSubmitted]);
 
   return (
     <>
       <form onSubmit={handleSubmit(props.action)} className={style.form}>
-        <h2>{props.title}</h2>
+        <h2>Log in:</h2>
 
         <Input
           label="Login"
           {...register("email")}
-          error={errors.login?.message}
+          error={errors.email?.message}
         />
 
         <Input
@@ -48,7 +38,7 @@ export const LoginRegister = (props: loginProps) => {
           {...register("password")}
           error={errors.password?.message}
         />
-        <button type="submit">Submit</button>
+        <LoginRegisterButton text="Login" />
       </form>
     </>
   );

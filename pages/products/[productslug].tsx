@@ -8,7 +8,7 @@ import type {
   GetProductQueryVariables,
 } from "generated/graphql";
 import { Product } from "views/product/ProductView";
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { client } from "apollo/apolloClients";
 
 function ProductPage(props) {

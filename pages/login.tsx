@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { LoginRegister } from "src/components/Login/LoginRegister";
+import { Login } from "src/components/Login/Login";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import style from "./login.module.css";
-import type { dataType } from "src/components/Login/LoginRegister";
+import type { dataType } from "src/components/Login/Login";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { Register } from "src/components/Register/Register";
 
 const LoginPage = () => {
   const login = (data: dataType) => {
@@ -26,8 +27,8 @@ const LoginPage = () => {
       <PageHeader title="Login / Register" />
       <div className="container">
         <section className={style.loginRegisterWrap}>
-          <LoginRegister title="Login Here" action={login} />
-          <LoginRegister title="Register Here" action={register} />
+          <Login action={login} />
+          <Register action={register} />
         </section>
       </div>
     </>

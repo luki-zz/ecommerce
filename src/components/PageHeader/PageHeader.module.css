@@ -1,6 +1,7 @@
 .productHeader {
   background-color: var(--color-primary-10);
   padding: 60px 0px;
+  margin-bottom: 60px;
 }
 
 .breadCrumbs {

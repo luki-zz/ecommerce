@@ -2,7 +2,7 @@ import React from "react";
 import style from "./ProductList.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import type { GetProductQuery, GetProductsQuery } from "generated/graphql";
+import type { GetProductsQuery } from "generated/graphql";
 
 export const ProductsList = ({
   products,
