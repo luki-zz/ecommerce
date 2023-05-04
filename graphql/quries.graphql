@@ -26,3 +26,18 @@ query GetProducts {
     }
   }
 }
+
+mutation CreateAccount($email: String!, $password: String!) {
+  createAccount(data: { email: $email, password: $password }) {
+    id
+    email
+  }
+}
+
+query GetAccountByEmail($email: String!) {
+  account(where: { email: $email }, stage: DRAFT) {
+    id
+    password
+    email
+  }
+}

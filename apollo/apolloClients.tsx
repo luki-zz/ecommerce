@@ -10,4 +10,5 @@ export const client = new ApolloClient({
 export const authClient = new ApolloClient({
   uri: GRAPHQL_URL,
   cache: new InMemoryCache(),
+  headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
 });
