@@ -6,7 +6,6 @@ type InputProps = {
   label: string;
 };
 
-// eslint-disable-next-line react/display-name
 export const InputCheckbox = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, ...props }, ref) => {
     return (
@@ -18,5 +17,6 @@ export const InputCheckbox = React.forwardRef<HTMLInputElement, InputProps>(
         <div className={style.notification}>{error}</div>
       </div>
     );
+    InputCheckbox.displayName = "InputCheckbox";
   }
 );
