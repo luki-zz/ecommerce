@@ -5,7 +5,7 @@ import logo from "../../../public/logo.svg";
 import { CartIcon } from "../CartIcon/CartIcon";
 import style from "./Header.module.css";
 import { Navlist } from "./Navlist";
-import { Search } from "./Search";
+import { Search } from "../Search/Search";
 
 const Header = () => {
   return (

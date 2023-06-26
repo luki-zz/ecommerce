@@ -48094,9 +48094,13 @@
             "name": "images",
             "description": null,
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AssetCreateManyInlineInput",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "AssetCreateManyInlineInput",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,

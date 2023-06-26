@@ -12,7 +12,7 @@ export type CartContextType = {
     image: { url: string; width: number; height: number };
   }) => void;
   cartSummary: { totalAmount: number; totalCost: number };
-  cart: CartTypes[];
+  cart: CartTypes;
   clearCart: () => void;
 };
 
@@ -26,7 +26,7 @@ export type ProductType = {
 const CartContext = React.createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cart, setCart] = useState<CartTypes[]>([]);
+  const [cart, setCart] = useState<CartTypes>([]);
 
   useEffect(() => {
     const localCart = localStorage.getItem("cart");

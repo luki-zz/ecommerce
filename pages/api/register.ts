@@ -3,11 +3,11 @@ import * as bcrypt from "bcrypt";
 import { registerSchema } from "src/components/Login/loginRegisterSchema";
 import { ValidationError } from "yup";
 import { authClient } from "apollo/apolloClients";
-import {
-  CreateAccountDocument,
+import type {
   CreateAccountMutation,
   CreateAccountMutationVariables,
 } from "generated/graphql";
+import { CreateAccountDocument } from "generated/graphql";
 
 const handler: NextApiHandler = async (req, res) => {
   if (!process.env.ADMIN_TOKEN) {

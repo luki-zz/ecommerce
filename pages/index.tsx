@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { useGetProductsQuery } from "generated/graphql";
 import { ProductsList } from "src/components/ProductList/ProductsList";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const { data, loading, error } = useGetProductsQuery();
+  const { data, loading } = useGetProductsQuery();
   const { status, data: sessionData } = useSession();
   if (loading)
     return (

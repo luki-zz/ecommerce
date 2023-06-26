@@ -1,44 +1,61 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { GetProductDocument } from "generated/graphql";
-import type {
-  GetProductQueryResult,
-  GetProductQueryVariables,
-} from "generated/graphql";
 import { Product } from "views/product/ProductView";
-import type { GetServerSidePropsContext } from "next";
-import { client } from "apollo/apolloClients";
+import { authClient } from "apollo/apolloClients";
+import type { InferGetStaticPathsType } from "src/types/types";
+import type { InferGetStaticPropsType } from "next";
+import type {
+  GetProductBySlugQuery,
+  GetProductBySlugQueryVariables,
+  GetSlugProductsQuery,
+} from "generated/graphql";
+import {
+  GetSlugProductsDocument,
+  GetProductBySlugDocument,
+} from "generated/graphql";
 
-function ProductPage(props) {
+export type ProductPageProps = InferGetStaticPropsType<typeof getStaticProps>;
+function ProductPage(props: ProductPageProps) {
   return <Product product={props.product} />;
 }
 
 export default ProductPage;
 
-export async function getServerSideProps({
-  params,
-}: GetServerSidePropsContext) {
-  const slug = params?.productslug;
-  if (typeof slug !== "string") {
-    return { notFound: true };
-  }
-
-  const product = await client.query<
-    GetProductQueryResult,
-    GetProductQueryVariables
-  >({
-    query: GetProductDocument,
-    variables: { slug },
+export const getStaticPaths = async () => {
+  const { data } = await authClient.query<GetSlugProductsQuery>({
+    query: GetSlugProductsDocument,
   });
-  const { data } = product;
-
-  if (!data.product) {
-    return { notFound: true };
-  }
-
   return {
-    props: { product: data.product }, // will be passed to the page component as props
+    paths: data.products.slice(0, 5).map(({ slug }) => ({
+      params: {
+        productSlug: slug,
+      },
+    })),
+    fallback: "blocking",
   };
-}
+};
+
+export const getStaticProps = async ({
+  params,
+}: InferGetStaticPathsType<typeof getStaticPaths>) => {
+  if (!params?.productSlug) {
+    return {
+      notFound: true,
+    };
+  }
+  const { data } = await authClient.query<
+    GetProductBySlugQuery,
+    GetProductBySlugQueryVariables
+  >({
+    query: GetProductBySlugDocument,
+    variables: { slug: params.productSlug },
+  });
+
+  if (data.product) {
+    return {
+      props: { product: data.product },
+    };
+  }
+  return {
+    notFound: true,
+  };
+};

@@ -2,10 +2,10 @@ import React from "react";
 import Image from "next/image";
 import style from "./ProductView.module.css";
 import { useCartContext } from "src/context/cart_context/CartContext";
-import Link from "next/link";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
+import type { ProductPageProps } from "pages/products/[productSlug]";
 
-export function Product({ product }) {
+export function Product({ product }: ProductPageProps) {
   const { name, description, price, images, id } = product;
 
   const { addToCart } = useCartContext();
@@ -33,7 +33,18 @@ export function Product({ product }) {
             <p className={style.productDescription}>{description}</p>
             <button
               className={style.addToCart}
-              onClick={() => addToCart({ id, name, price, image: images[0] })}
+              onClick={() =>
+                addToCart({
+                  id,
+                  name,
+                  price,
+                  image: {
+                    url: images[0].url,
+                    width: images[0].width ?? 0,
+                    height: images[0].height ?? 0,
+                  },
+                })
+              }
             >
               Add To Cart
             </button>

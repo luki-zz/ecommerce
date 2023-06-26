@@ -52,7 +52,6 @@ export const Register = (props: registerProps) => {
         />
 
         <InputCheckbox
-          type="checkbox"
           {...register("regulations")}
           label=" * I accept terms of service and I have read the information regarding mine personal details below."
           error={errors.regulations?.message}

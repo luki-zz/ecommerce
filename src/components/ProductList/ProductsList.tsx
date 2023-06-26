@@ -7,7 +7,7 @@ import type { GetProductsQuery } from "generated/graphql";
 export const ProductsList = ({
   products,
 }: {
-  products: GetProductsQuery["products"];
+  products: GetProductsQuery["products"] | undefined;
 }) => {
   return (
     <ul className={style.productsList}>
@@ -37,7 +37,7 @@ type ProductType = {
   image: { width: number; height: number; src: string };
 };
 
-export const Product = ({ name, slug, id, price, image }: ProductType) => {
+export const Product = ({ name, slug, price, image }: ProductType) => {
   return (
     <Link href={`products/${slug}`} className={style.productItem}>
       <Image alt={name} {...image} />

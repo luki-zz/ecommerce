@@ -41,3 +41,24 @@ query GetAccountByEmail($email: String!) {
     email
   }
 }
+
+query GetSlugProducts {
+  products {
+    slug
+  }
+}
+
+query GetProductBySlug($slug: String!) {
+  product(where: { slug: $slug }) {
+    id
+    name
+    description
+    price
+    slug
+    images {
+      height
+      width
+      url
+    }
+  }
+}
