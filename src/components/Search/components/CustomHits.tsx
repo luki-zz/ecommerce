@@ -10,7 +10,7 @@ export const Hits = ({
 
   return (
     <ul>
-      {allSearchResults.hits.map((product) => (
+      {allSearchResults?.hits.map((product) => (
         <li key={product.objectID}>{product.name}</li>
       ))}
       ;
