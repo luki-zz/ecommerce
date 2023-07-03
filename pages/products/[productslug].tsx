@@ -1,61 +1,44 @@
 import React from "react";
-import { Product } from "views/product/ProductView";
-import { authClient } from "apollo/apolloClients";
-import type { InferGetStaticPathsType } from "src/types/types";
-import type { InferGetStaticPropsType } from "next";
+import { gql, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { GetProductDocument } from "generated/graphql";
 import type {
-  GetProductBySlugQuery,
-  GetProductBySlugQueryVariables,
-  GetSlugProductsQuery,
+  GetProductQueryResult,
+  GetProductQueryVariables,
 } from "generated/graphql";
-import {
-  GetSlugProductsDocument,
-  GetProductBySlugDocument,
-} from "generated/graphql";
+import { Product } from "views/product/ProductView";
+import type { GetServerSidePropsContext } from "next";
+import { client } from "apollo/apolloClients";
 
-export type ProductPageProps = InferGetStaticPropsType<typeof getStaticProps>;
-function ProductPage(props: ProductPageProps) {
+function ProductPage(props) {
   return <Product product={props.product} />;
 }
 
 export default ProductPage;
 
-export const getStaticPaths = async () => {
-  const { data } = await authClient.query<GetSlugProductsQuery>({
-    query: GetSlugProductsDocument,
-  });
-  return {
-    paths: data.products.slice(0, 5).map(({ slug }) => ({
-      params: {
-        productSlug: slug,
-      },
-    })),
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps = async ({
+export async function getServerSideProps({
   params,
-}: InferGetStaticPathsType<typeof getStaticPaths>) => {
-  if (!params?.productSlug) {
-    return {
-      notFound: true,
-    };
+}: GetServerSidePropsContext) {
+  const slug = params?.productslug;
+  if (typeof slug !== "string") {
+    return { notFound: true };
   }
-  const { data } = await authClient.query<
-    GetProductBySlugQuery,
-    GetProductBySlugQueryVariables
-  >({
-    query: GetProductBySlugDocument,
-    variables: { slug: params.productSlug },
-  });
 
-  if (data.product) {
-    return {
-      props: { product: data.product },
-    };
+  const product = await client.query<
+    GetProductQueryResult,
+    GetProductQueryVariables
+  >({
+    query: GetProductDocument,
+    variables: { slug },
+  });
+  const { data } = product;
+
+  if (!data.product) {
+    return { notFound: true };
   }
+
   return {
-    notFound: true,
+    props: { product: data.product }, // will be passed to the page component as props
   };
-};
+}
