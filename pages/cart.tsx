@@ -4,8 +4,26 @@ import React from "react";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import { useCartContext } from "src/context/cart_context/CartContext";
 import style from "./cart.module.css";
+import { loadStripe } from "@stripe/stripe-js";
+import { getEnvVar } from "apollo/apolloClients";
+import type { SessionStripe } from "./api/checkout";
+import type { Stripe } from "stripe";
 
+const stripePromise = loadStripe(getEnvVar(process.env.NEXT_PUBLIC_PUBLISHABE));
 const CartPage = () => {
+  const handleStripePay = async () => {
+    const stripe = await stripePromise;
+    const body: Stripe.Checkout.SessionCreateParams.LineItem[] = 0;
+    const res = await fetch("api/checkout", {
+      method: "POST",
+      body: JSON.stringify("nasz koszyk"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const json = (await res.json()) as SessionStripe;
+    await stripe?.redirectToCheckout({ sessionId: (await json.session).id });
+  };
   const { cart, cartSummary, clearCart } = useCartContext();
   {
     if (cart.length < 1) {
@@ -80,6 +98,9 @@ const CartPage = () => {
             <div className={style.cartSummary}>
               <h4>Order Total: {cartSummary.totalCost}</h4>
             </div>
+            <button className={style.checkoutButton} onClick={handleStripePay}>
+              Checkout
+            </button>
           </section>
         </div>
       </>
