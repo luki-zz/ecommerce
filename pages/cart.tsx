@@ -11,101 +11,113 @@ import type { Stripe } from "stripe";
 
 const stripePromise = loadStripe(getEnvVar(process.env.NEXT_PUBLIC_PUBLISHABE));
 const CartPage = () => {
+  const { cart, cartSummary, clearCart } = useCartContext();
+
+  if (cart.length < 1) {
+    return (
+      <>
+        <PageHeader title={"Cart"} />
+        <div className="container">
+          <div className={style.cartEmpyt}>
+            Your Cart is empty, please continue shopping
+          </div>
+        </div>
+      </>
+    );
+  }
+
   const handleStripePay = async () => {
     const stripe = await stripePromise;
-    const body: Stripe.Checkout.SessionCreateParams.LineItem[] = 0;
+    const body: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.map(
+      (product) => ({
+        quantity: product.qty,
+        price_data: {
+          unit_amount: product.price,
+          currency: "PLN",
+          product_data: {
+            name: product.name,
+            images: [product.image.url],
+          },
+        },
+      })
+    );
     const res = await fetch("api/checkout", {
       method: "POST",
-      body: JSON.stringify("nasz koszyk"),
+      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const json = (await res.json()) as SessionStripe;
-    await stripe?.redirectToCheckout({ sessionId: (await json.session).id });
+    await stripe?.redirectToCheckout({ sessionId: json.session.id });
   };
-  const { cart, cartSummary, clearCart } = useCartContext();
-  {
-    if (cart.length < 1) {
-      return (
-        <>
-          <PageHeader title={"Cart"} />
-          <div className="container">
-            <div className={style.cartEmpyt}>
-              Your Cart is empty, please continue shopping
-            </div>
-          </div>
-        </>
-      );
-    }
 
-    return (
-      <>
-        <PageHeader title={"Cart"} />
-        <div className="container">
-          <div className={style.header}>
-            <div>
-              <h5>Item</h5>
-            </div>
-            <div>
-              <h5>Price</h5>
-            </div>
-            <div>
-              <h5>Qurantity</h5>
-            </div>
-            <div>
-              <h5>Subtotal</h5>
-            </div>
-            <div></div>
+  return (
+    <>
+      <PageHeader title={"Cart"} />
+      <div className="container">
+        <div className={style.header}>
+          <div>
+            <h5>Item</h5>
           </div>
-          <div className={style.articles}>
-            {cart.map((product) => {
-              return (
-                <div className={style.article} key={product.id}>
-                  <div className={style.articleNameCol}>
-                    <Image
-                      src={product.image.url}
-                      width={product.image.width}
-                      height={product.image.height}
-                      alt={product.name}
-                      className={style.articleImage}
-                    />
-                    <h5>{product.name}</h5>
-                  </div>
-                  <div className={style.col2}>
-                    <h5>{product.price}</h5>
-                  </div>
-                  <div className={style.col3}>
-                    <h5>{product.qty}</h5>
-                  </div>
-                  <div className={style.col4}>
-                    <h5>{product.value}</h5>
-                  </div>
-                  <div className={style.col5}></div>
-                </div>
-              );
-            })}
+          <div>
+            <h5>Price</h5>
           </div>
-          <div className={style.cartFooter}>
-            <Link className={style.continueShoppingBtn} href="/">
-              Continue Shopping
-            </Link>
-            <button onClick={clearCart} className={style.clearCartBtn}>
-              Clear cart
-            </button>
+          <div>
+            <h5>Qurantity</h5>
           </div>
-          <section className={style.cartSummaryWrap}>
-            <div className={style.cartSummary}>
-              <h4>Order Total: {cartSummary.totalCost}</h4>
-            </div>
-            <button className={style.checkoutButton} onClick={handleStripePay}>
-              Checkout
-            </button>
-          </section>
+          <div>
+            <h5>Subtotal</h5>
+          </div>
+          <div></div>
         </div>
-      </>
-    );
-  }
+        <div className={style.articles}>
+          {cart.map((product) => {
+            return (
+              <div className={style.article} key={product.id}>
+                <div className={style.articleNameCol}>
+                  <Image
+                    src={product.image.url}
+                    width={product.image.width}
+                    height={product.image.height}
+                    alt={product.name}
+                    className={style.articleImage}
+                  />
+                  <h5>{product.name}</h5>
+                </div>
+                <div className={style.col2}>
+                  <h5>{product.price}</h5>
+                </div>
+                <div className={style.col3}>
+                  <h5>{product.qty}</h5>
+                </div>
+                <div className={style.col4}>
+                  <h5>{product.value}</h5>
+                </div>
+                <div className={style.col5}></div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={style.cartFooter}>
+          <Link className={style.continueShoppingBtn} href="/">
+            Continue Shopping
+          </Link>
+          <button onClick={clearCart} className={style.clearCartBtn}>
+            Clear cart
+          </button>
+        </div>
+        <section className={style.cartSummaryWrap}>
+          <div className={style.cartSummary}>
+            <h4>Order Total: {cartSummary.totalCost}</h4>
+          </div>
+          <button className={style.checkoutButton} onClick={handleStripePay}>
+            Checkout
+          </button>
+        </section>
+      </div>
+    </>
+  );
 };
 
 export default CartPage;
