@@ -2,6 +2,7 @@ import { useGetProductsQuery } from "generated/graphql";
 import { ProductsList } from "src/components/ProductList/ProductsList";
 import { PageHeader } from "src/components/PageHeader/PageHeader";
 import { useSession } from "next-auth/react";
+import { NextSeo } from "next-seo";
 
 export default function Home() {
   const { data, loading } = useGetProductsQuery();
@@ -20,6 +21,10 @@ export default function Home() {
     );
   return (
     <>
+      <NextSeo
+        title="ComfySloth - shop page"
+        description="Simple React/Next jest test store"
+      />
       <PageHeader title={"Products"} />
       <p>{status}</p>
       <p>{JSON.stringify(sessionData)}</p>

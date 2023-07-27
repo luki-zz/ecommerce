@@ -10,9 +10,15 @@ import type {
 import { Product } from "views/product/ProductView";
 import type { GetServerSidePropsContext } from "next";
 import { client } from "apollo/apolloClients";
+import { NextSeo } from "next-seo";
 
 function ProductPage(props) {
-  return <Product product={props.product} />;
+  return (
+    <>
+      <NextSeo title={`${props.product.name} - ComfySloth shop`} />
+      <Product product={props.product} />
+    </>
+  );
 }
 
 export default ProductPage;

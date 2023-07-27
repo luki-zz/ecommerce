@@ -52,6 +52,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         addToCart: (product: Parameters<CartContextType["addToCart"]>[0]) => {
           setCart((prevCart) => addProductToCart(prevCart, product));
+          console.log(product);
         },
         cartSummary: getCartSummary(cart),
         cart,

@@ -28,22 +28,10 @@ const CartPage = () => {
 
   const handleStripePay = async () => {
     const stripe = await stripePromise;
-    const body: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.map(
-      (product) => ({
-        quantity: product.qty,
-        price_data: {
-          unit_amount: product.price,
-          currency: "PLN",
-          product_data: {
-            name: product.name,
-            images: [product.image.url],
-          },
-        },
-      })
-    );
+    console.log(JSON.stringify(cart));
     const res = await fetch("api/checkout", {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify({ cart }),
       headers: {
         "Content-Type": "application/json",
       },
